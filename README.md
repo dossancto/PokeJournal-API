@@ -18,8 +18,8 @@ além de favoritar os pokémons que desejar, conhecerá novas funções de cria�
 
 ## Diagrama de classes
 
-<img src="" alt="class diagram" />
+<img src="img/classDiagram.jpg" alt="class diagram" />
 
 ## DER
 
-<img src="" alt="der" />
+<img src="img/api-der.png" alt="der" />
