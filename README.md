@@ -6,13 +6,12 @@ Api para aplicação [Poke Journal](https://github.com/lu-css/Pokejournal/).
 </div>
 
 ### 3°A Etim - Desenvolvimento de Sistemas
-> Débora Liberato Ribeiro ╰(*°▽°*)╯<br>
-> Lucas dos Santos Silva
+> Débora Liberato Ribeiro (づ｡◕‿‿◕｡)づ<br>
+> Lucas dos Santos Silva ⊂◉‿◉つ
 
-## Descrição da API
+## Descrição das atualizações de informação no aplicativo PokéJournal (API)
 
-Para a criação de nossa API planejamos investir no anterior botão criado "Favoritar", onde o usuário poderá 
-além de favoritar os pokémons que desejar, conhecerá novas funções de criação de equipes de pokémons e agrupamentos.
+As novas funcionalidades são “Favoritar” e “Adicionar equipe” ambos relacionados com a criação da nova API, o botão para primeira função citada já foi criado anteriormente, porém não apresentava funcionamento. Nossos planos agora para a API são criar um EndPoint que salvará um Pokémon como favorito. Para a criação das equipes outro EndPoint  permitirá a adição de até cinco Pokémons.
 
 ## Diagramas
 
