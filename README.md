@@ -21,4 +21,6 @@ As novas funcionalidades são “Favoritar” e “Adicionar equipe” ambos rel
 
 ## DER
 
-<img src="img/api-der.png" alt="der" />
+<img src="img/api-der.png" alt="der" width="50%" />
+
+<img src="img/der-certo.jpg" alt="der" />
