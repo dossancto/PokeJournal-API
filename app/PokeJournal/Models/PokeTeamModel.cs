@@ -3,25 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PokeJournal.Models;
 
-public class PokemonListModel {
+public class PokeTeamModel {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id {get; set;}
 
     [Required]
-    public string? DefaultName {get; set;}
+    public string? Name {get; set;}
 
-    [Required]
-    public int PokemonIndex {get; set;}
+    public string? Description  {get; set;}
 
-    public string CustomName {get; set;} = default!;
-
-    public string? ImgURL {get; set;}
-
-    public Guid PokeTeamId {get; set;}
-    public PokeTeamModel PokeTeam {get; set;}
+    public ICollection<PokemonListModel> Pokemons {get; set;} = default!;
 
     public DateTime CreatedAt {get; set;} = DateTime.Now;
-
     public DateTime UpdatedAt {get; set;} = DateTime.Now;
 }

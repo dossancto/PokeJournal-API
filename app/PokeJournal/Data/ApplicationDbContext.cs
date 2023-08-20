@@ -9,6 +9,14 @@ public class ApplicationDbContext : DbContext
         : base(options) { }
 
     public DbSet<PokemonListModel> PokemonLists { get; set; } = default!;
+    public DbSet<PokeTeamModel> PokeTeams { get; set; } = default!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) { }
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<PokemonListModel>()
+            .HasOne(b => b.PokeTeam)
+            .WithMany(a => a.Pokemons)
+            .HasForeignKey(b => b.PokeTeamId);
+
+
+    }
 }
