@@ -23,6 +23,7 @@ public class PokeAPI: IPokeAPIProvider {
         }
         catch (HttpRequestException ex)
         {
+          Console.WriteLine($"pokeapi: {ex.Message}");
           return null;
         }
       }

@@ -19,7 +19,7 @@ public class PokemonListModel {
     public string? ImgURL {get; set;}
 
     public Guid PokeTeamId {get; set;}
-    public PokeTeamModel PokeTeam {get; set;}
+    public PokeTeamModel? PokeTeam {get; set;}
 
     public DateTime CreatedAt {get; set;} = DateTime.Now;
 

@@ -2,18 +2,22 @@ using PokeJournal.Data;
 using PokeJournal.Models;
 using PokeJournal.Providers.PokeAPI; 
 
-namespace PokeJournal.Usecases.PokemonList;
+namespace PokeJournal.Usecases.PokeTeam;
 
-public class Create{
+public class AddPokemon{
     private readonly ApplicationDbContext _context;
+
     private readonly PokemonListModel pokemon;
+    private readonly PokeTeamModel team;
+
     private readonly IPokeAPIProvider _pokeApi;
 
-    public Create(ApplicationDbContext context, int pokemonIndex, string customName){
+    public AddPokemon(ApplicationDbContext context, int pokemonIndex, string customName, PokeTeamModel team){
       _context = context;
 
       _pokeApi = new PokeAPI();
 
+      this.team = team;
       this.pokemon = new PokemonListModel {
         PokemonIndex = pokemonIndex,
         CustomName = customName
@@ -22,6 +26,8 @@ public class Create{
     }
 
     public PokemonListModel Execute(){
+      this.pokemon.PokeTeam = this.team;
+
       var pokemonInfos = _pokeApi.GetBasicInfos(this.pokemon.PokemonIndex.ToString()).Result;
 
       if (pokemonInfos == null || pokemonInfos.name == null){

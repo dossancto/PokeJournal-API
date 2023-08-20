@@ -1,6 +1,6 @@
-namespace PokeJournal.Test.Usecases.PokemonList;
+namespace PokeJournal.Test.Usecases.PokeTeam;
 
-using PokemonList = PokeJournal.Usecases.PokemonList;
+using PokeTeam = PokeJournal.Usecases.PokeTeam;
 
 using PokeJournal.Data;
 using PokeJournal.Models;
@@ -8,16 +8,19 @@ using PokeJournal.Models;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-public class CreateTest: IDisposable
+public class AddPokemonTest: IDisposable
 {
     private readonly ApplicationDbContext _context;
+    private readonly PokeTeam.Create _baseTeam;
 
-    public CreateTest(){
+    public AddPokemonTest(){
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
         .UseInMemoryDatabase(databaseName: "Organizart")
         .Options;
 
         _context = new ApplicationDbContext(options);
+
+        _baseTeam = new PokeTeam.Create(_context, 1, "My First Team", "Some description");
     }
 
     public void Dispose()
@@ -28,19 +31,23 @@ public class CreateTest: IDisposable
     [Fact]
     public void SuccessfullCreateNewPokemon()
     {
-      var insertedPokemon = new PokemonList.Create(_context, 1, "Verdin").Execute();
+      var team = _baseTeam.Execute();
+      var insertedPokemon = new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
 
       Assert.NotEqual(Guid.Empty, insertedPokemon.Id);
-      Assert.Equal("Verdin", insertedPokemon.CustomName);
-      Assert.Equal("bulbasaur", insertedPokemon.DefaultName.ToLower());
+      Assert.Equal("Vermelin", insertedPokemon.CustomName);
+      Assert.Equal("charmander", insertedPokemon.DefaultName.ToLower());
+      Assert.Equal(2, team.Pokemons.Count);
     }
 
     [Fact]
     public void FailOnNotFoundedPokemon()
     {
-      var insertedPokemon = new PokemonList.Create(_context, 99999999, "Nobody");
+      var team = _baseTeam.Execute();
+      var insertedPokemon = new PokeTeam.AddPokemon(_context, 99999999, "Nobody", team);
 
       var exception = Assert.Throws<Exception>(() => insertedPokemon.Execute());
       Assert.Equal("Pokemon with index: '99999999', Not Founded", exception.Message);
+      Assert.Single(team.Pokemons);
     }
 }
