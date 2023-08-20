@@ -23,6 +23,7 @@ public class UserModel{
     public string Salt {get; set;} = default!;
 
     public ICollection<PokeTeamModel> PokeTeams {get; set;} = default!;
+    public ICollection<FavoritePokemonModel> FavoritePokemons {get; set;} = default!;
 
     public DateTime CreatedAt {get; set;} = DateTime.Now;
 

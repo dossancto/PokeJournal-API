@@ -11,6 +11,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<PokemonListModel> PokemonLists { get; set; } = default!;
     public DbSet<PokeTeamModel> PokeTeams { get; set; } = default!;
     public DbSet<UserModel> Users { get; set; } = default!;
+    public DbSet<FavoritePokemonModel> FavoritePokemons { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<PokemonListModel>()
@@ -21,6 +22,11 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<PokeTeamModel>()
             .HasOne(a => a.User)
             .WithMany(b => b.PokeTeams)
+            .HasForeignKey(a => a.UserId);
+
+        modelBuilder.Entity<FavoritePokemonModel>()
+            .HasOne(a => a.User)
+            .WithMany(b => b.FavoritePokemons)
             .HasForeignKey(a => a.UserId);
     }
 }
