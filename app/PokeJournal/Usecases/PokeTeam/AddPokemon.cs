@@ -26,15 +26,38 @@ public class AddPokemon{
     }
 
     public PokemonListModel Execute(){
+      Valid();
+
       this.pokemon.PokeTeam = this.team;
 
+      var pokemonInfos = GetPokemonInfos();
+
+      this.pokemon.DefaultName = pokemonInfos.name;
+
+      return Save();
+    }
+
+    private void Valid(){
+      if (this.team.Pokemons == null) {
+        return;
+      }
+
+      if(this.team.Pokemons.Count >= 5){
+        throw new Exception("You can have only five pokemons on a team.");
+      }
+    }
+
+    private PokemonResponse GetPokemonInfos(){
       var pokemonInfos = _pokeApi.GetBasicInfos(this.pokemon.PokemonIndex.ToString()).Result;
 
       if (pokemonInfos == null || pokemonInfos.name == null){
         throw new Exception($"Pokemon with index: '{this.pokemon.PokemonIndex}', Not Founded");
       }
 
-      this.pokemon.DefaultName = pokemonInfos.name;
+      return pokemonInfos;
+    }
+
+    private PokemonListModel Save(){
       var savedPokemon = _context.PokemonLists.Add(this.pokemon);
       _context.SaveChanges();
       return savedPokemon.Entity;

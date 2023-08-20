@@ -50,4 +50,22 @@ public class AddPokemonTest: IDisposable
       Assert.Equal("Pokemon with index: '99999999', Not Founded", exception.Message);
       Assert.Single(team.Pokemons);
     }
+
+    [Fact]
+    public void FailOn_MaxPokemon()
+    {
+      var team = _baseTeam.Execute();
+
+      new PokeTeam.AddPokemon(_context, 1, "one", team).Execute();
+      new PokeTeam.AddPokemon(_context, 2, "two", team).Execute();
+      new PokeTeam.AddPokemon(_context, 3, "tree", team).Execute();
+      new PokeTeam.AddPokemon(_context, 4, "four", team).Execute();
+
+      var insertPokemon = new PokeTeam.AddPokemon(_context, 4, "Premiado", team);
+
+      var exception = Assert.Throws<Exception>(() => insertPokemon.Execute());
+      Assert.Equal("You can have only five pokemons on a team.", exception.Message);
+
+      Assert.Equal(5, team.Pokemons.Count);
+    }
 }
