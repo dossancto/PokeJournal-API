@@ -10,13 +10,17 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<PokemonListModel> PokemonLists { get; set; } = default!;
     public DbSet<PokeTeamModel> PokeTeams { get; set; } = default!;
+    public DbSet<UserModel> Users { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<PokemonListModel>()
-            .HasOne(b => b.PokeTeam)
-            .WithMany(a => a.Pokemons)
-            .HasForeignKey(b => b.PokeTeamId);
+            .HasOne(a => a.PokeTeam)
+            .WithMany(b => b.Pokemons)
+            .HasForeignKey(a => a.PokeTeamId);
 
-
+        modelBuilder.Entity<PokeTeamModel>()
+            .HasOne(a => a.User)
+            .WithMany(b => b.PokeTeams)
+            .HasForeignKey(a => a.UserId);
     }
 }
