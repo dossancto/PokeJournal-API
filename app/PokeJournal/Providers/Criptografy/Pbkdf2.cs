@@ -29,4 +29,11 @@ public class Pbkdf2: ICriptografyProvider{
         var salt = GenenateSalt();
         return Hash(password, salt);
     }
+
+    public bool VerifyPassword(string password, string storedHashedPassword, string storedSalt)
+    {
+        byte[] saltBytes = Convert.FromBase64String(storedSalt);
+        var hashedPassword = Hash(password, saltBytes).HashedPassword;
+        return hashedPassword == storedHashedPassword;
+    }
 }

@@ -1,9 +1,9 @@
 using System.Text;
-using PokeJournal.DTO;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using DotNetEnv;
+using Microsoft.IdentityModel.Tokens;
+using PokeJournal.DTO;
 
 namespace PokeJournal.Providers.TokenProvider; 
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PokeJournal.Models;
 using PokeJournal.Data;
@@ -9,6 +10,7 @@ namespace PokeJournal.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class PokeTeamController : ControllerBase
 {
   private readonly ApplicationDbContext _context;
