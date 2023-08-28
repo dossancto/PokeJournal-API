@@ -1,6 +1,7 @@
 namespace PokeJournal.Test.Usecases.PokeTeam;
 
 using PokeTeam = PokeJournal.Usecases.PokeTeam;
+using User = PokeJournal.Usecases.User;
 
 using PokeJournal.Data;
 using PokeJournal.Models;
@@ -20,7 +21,8 @@ public class AddPokemonTest: IDisposable
 
         _context = new ApplicationDbContext(options);
 
-        _baseTeam = new PokeTeam.Create(_context, 1, "My First Team", "Some description");
+        var user = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        _baseTeam = new PokeTeam.Create(_context, user, 1, "My First Team", "Some description");
     }
 
     public void Dispose()

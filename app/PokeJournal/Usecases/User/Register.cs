@@ -2,12 +2,15 @@ namespace PokeJournal.Usecases.User;
 
 using PokeJournal.Models;
 using PokeJournal.Data;
+using PokeJournal.DTO;
 using PokeJournal.Providers.Criptografy;
 
 public class Register{
     private readonly ApplicationDbContext _context;
     private readonly ICriptografyProvider crypto;
     private readonly UserModel user;
+
+    public Register(ApplicationDbContext context, UserDTO dto): this(context, dto.userName, dto.email, dto.password){}
 
     public Register(ApplicationDbContext context, string name, string email, string password){
       _context = context;
