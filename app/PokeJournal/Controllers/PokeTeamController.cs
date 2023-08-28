@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PokeJournal.Models;
@@ -31,7 +32,15 @@ public class PokeTeamController : ControllerBase
   [Route("New")]
   public async Task<ActionResult<PokeTeamModel>> CreateTeam(PokeTeamDTO teamDTO)
   {
-      var user = new User.Select(_context).FromId(teamDTO.userId);
+     Console.WriteLine("salve");
+
+      var claimsIdentity = User.Identity as ClaimsIdentity;
+      var claims = claimsIdentity.Claims;
+
+      var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+      Console.WriteLine(userId);
+
+      var user = new User.Select(_context).FromId(Guid.Parse(userId));
       var team = new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
 
       return CreatedAtAction(
