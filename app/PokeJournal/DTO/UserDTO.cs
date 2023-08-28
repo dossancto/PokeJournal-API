@@ -1,3 +1,3 @@
 namespace PokeJournal.DTO;
 
-public record UserDTO (string userName, string email, string password){}
+public record UserDTO (Guid id, string userName, string email, string password){}
