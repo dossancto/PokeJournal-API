@@ -44,7 +44,7 @@ public class PokeTeamController : ControllerBase
   {
       var team = new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
 
-      var pokemon = new PokeTeam.AddPokemon(_context, 2, "two", team).Execute();
+      var pokemon = new PokeTeam.AddPokemon(_context, addpokemonDTO.pokemonIndex, addpokemonDTO.customName, team).Execute();
 
       return new PokemonListDTO(pokemon.DefaultName, pokemon.CustomName, pokemon.ImgURL, pokemon.PokeTeamId, pokemon.PokemonIndex);
   }
