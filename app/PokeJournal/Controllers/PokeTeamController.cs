@@ -26,6 +26,7 @@ public class PokeTeamController : ControllerBase
   }
 
   [HttpGet("{id}")]
+  [AllowAnonymous]
   public async Task<ActionResult<PokeTeamModel>> ShowTeam(Guid id)
   {
     var team = new PokeTeam.Select(_context).FromId(id);
@@ -55,7 +56,15 @@ public class PokeTeamController : ControllerBase
   [Route("AddPokemon")]
   public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
   {
+      var claimsIdentity = User.Identity as ClaimsIdentity;
+      var jwthelper = new JwtHelper(claimsIdentity);
+      var userId = Guid.Parse(jwthelper.GetClaimValue(ClaimTypes.NameIdentifier));
+
       var team = new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
+
+      if(team.UserId != userId){
+        return StatusCode(403, "You don't have access to this team.");
+      }
 
       var pokemon = new PokeTeam.AddPokemon(_context, addpokemonDTO.pokemonIndex, addpokemonDTO.customName, team).Execute();
 
