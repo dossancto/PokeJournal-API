@@ -26,7 +26,8 @@ public class PokeTeamController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<ActionResult<PokeTeamModel>> NewTeam(PokeTeamDTO teamDTO)
+  [Route("New")]
+  public async Task<ActionResult<PokeTeamModel>> CreateTeam(PokeTeamDTO teamDTO)
   {
       var user = new User.Select(_context).FromId(teamDTO.userId);
       var team = new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
@@ -35,5 +36,16 @@ public class PokeTeamController : ControllerBase
           nameof(ShowTeam),
           new { id = team.Id },
           team);
+  }
+
+  [HttpPost]
+  [Route("AddPokemon")]
+  public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
+  {
+      var team = new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
+
+      var pokemon = new PokeTeam.AddPokemon(_context, 2, "two", team).Execute();
+
+      return new PokemonListDTO(pokemon.DefaultName, pokemon.CustomName, pokemon.ImgURL, pokemon.PokeTeamId, pokemon.PokemonIndex);
   }
 }

@@ -12,7 +12,22 @@ public class Select{
     }
 
     public PokeTeamModel FromId(Guid teamId){
-      var team = _context.PokeTeams.FirstOrDefault(team => team.Id == teamId);
+      var team = _context.PokeTeams.Find(teamId);
+
+      team.Pokemons = _context.PokemonLists
+        .Where(x => x.PokeTeamId == teamId)
+        .Select(x => new PokemonListModel{
+            Id = x.Id,
+            PokeTeamId= x.PokeTeamId,
+            DefaultName = x.DefaultName,
+            CustomName = x.CustomName,
+            PokemonIndex = x.PokemonIndex,
+            ImgURL = x.ImgURL
+            })
+        .ToList();
+
+      Console.WriteLine(team.Id);
+      Console.WriteLine(team.Pokemons);
       return team;
     }
 }
