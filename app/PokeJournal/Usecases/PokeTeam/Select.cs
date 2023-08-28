@@ -30,4 +30,9 @@ public class Select{
       Console.WriteLine(team.Pokemons);
       return team;
     }
+
+    public List<PokeTeamModel> AllFromUser(Guid userId){
+      var teams = _context.PokeTeams.Where(team => team.UserId == userId).ToList();
+      return teams;
+    }
 }
