@@ -63,6 +63,22 @@ public class PokeTeamController : ControllerBase
           team);
   }
 
+  [HttpDelete("Delete/{teamId:Guid}")]
+  public async Task<ActionResult<PokeTeamModel>> CreateTeam(Guid teamId)
+  {
+      // TODO: Check if the user is the team owner. 
+      // var claimsIdentity = User.Identity as ClaimsIdentity;
+      // var jwthelper = new JwtHelper(claimsIdentity);
+
+      // var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
+
+      // var user = new User.Select(_context).FromId(Guid.Parse(userId));
+
+      new PokeTeam.Delete(_context, teamId).Execute();
+
+      return Ok("Team deleted");
+  }
+
   [HttpPost]
   [Route("AddPokemon")]
   public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
