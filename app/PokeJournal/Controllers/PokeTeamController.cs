@@ -55,6 +55,8 @@ public class PokeTeamController : ControllerBase
       var user = new User.Select(_context).FromId(Guid.Parse(userId));
       var team = new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
 
+      team.User = null;
+
       return CreatedAtAction(
           nameof(ShowTeam),
           new { id = team.Id },

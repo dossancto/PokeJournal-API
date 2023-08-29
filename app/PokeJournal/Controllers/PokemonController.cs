@@ -1,50 +1,47 @@
-// using Microsoft.AspNetCore.Mvc;
-// using PokeJournal.Models;
-// using PokeJournal.Data;
-// using PokeJournal.DTO;
-// using PokeTeam = PokeJournal.Usecases.PokeTeam;
-// using User = PokeJournal.Usecases.User;
+using System.Security.Claims;
 
-// namespace PokeJournal.Controllers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-// [ApiController]
-// [Route("[controller]")]
-// public class PokemonController : ControllerBase
-// {
-//   private readonly ApplicationDbContext _context;
+using PokeJournal.Models;
+using PokeJournal.DTO;
 
-//   public PokemonController(ApplicationDbContext context){
-//     _context = context;
-//   }
+using PokeJournal.Data;
+using PokeJournal.Helpers;
 
-//   [HttpPost]
-//   public async Task<ActionResult<PokeTeamModel>> Favorite(Guid pokemonId)
-//   {
-//       var user = new User.Select(_context).FromId(teamDTO.userId);
-//       var inserted = new Pokemon.Favorite(_context, user, 1).Execute();
-//   }
+using Pokemon = PokeJournal.Usecases.Pokemon;
+using User = PokeJournal.Usecases.User;
 
-//   [HttpPost]
-//   [Route("New")]
-//   public async Task<ActionResult<PokeTeamModel>> CreateTeam(PokeTeamDTO teamDTO)
-//   {
-//       var user = new User.Select(_context).FromId(teamDTO.userId);
-//       var team = new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
+namespace PokeJournal.Controllers;
 
-//       return CreatedAtAction(
-//           nameof(ShowTeam),
-//           new { id = team.Id },
-//           team);
-//   }
+[ApiController]
+[Route("[controller]")]
+[Authorize]
+public class PokemonController : ControllerBase
+{
+  private readonly ApplicationDbContext _context;
 
-//   [HttpPost]
-//   [Route("AddPokemon")]
-//   public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
-//   {
-//       var team = new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
+  public PokemonController(ApplicationDbContext context){
+    _context = context;
+  }
 
-//       var pokemon = new PokeTeam.AddPokemon(_context, addpokemonDTO.pokemonIndex, addpokemonDTO.customName, team).Execute();
+  [HttpGet("All/{userId:Guid}")]
+  [AllowAnonymous]
+  public async Task<ActionResult<List<FavoritePokemonModel>>> AllFromUser(Guid userId)
+  {
+      var r = new Pokemon.Select(_context).AllFromUser(userId);
+      return r;
+  }
+  [HttpPost("Favorite/{pokemonIndex}")]
+  public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
+  {
+      var claimsIdentity = User.Identity as ClaimsIdentity;
+      var jwthelper = new JwtHelper(claimsIdentity);
+      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
+      var user = new User.Select(_context).FromId(Guid.Parse(userId));
 
-//       return new PokemonListDTO(pokemon.DefaultName, pokemon.CustomName, pokemon.ImgURL, pokemon.PokeTeamId, pokemon.PokemonIndex);
-//   }
-// }
+      var r = new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
+      r.User = null;
+      return r;
+  }
+}
