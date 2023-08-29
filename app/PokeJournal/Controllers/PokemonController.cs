@@ -32,6 +32,7 @@ public class PokemonController : ControllerBase
       var r = new Pokemon.Select(_context).AllFromUser(userId);
       return r;
   }
+
   [HttpPost("Favorite/{pokemonIndex}")]
   public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
   {
@@ -43,5 +44,17 @@ public class PokemonController : ControllerBase
       var r = new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
       r.User = null;
       return r;
+  }
+
+  [HttpPost("Unfavorite/{pokemonIndex}")]
+  public async Task<ActionResult<FavoritePokemonModel>> Unfavorite(int pokemonIndex)
+  {
+      var claimsIdentity = User.Identity as ClaimsIdentity;
+      var jwthelper = new JwtHelper(claimsIdentity);
+      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
+      var user = new User.Select(_context).FromId(Guid.Parse(userId));
+
+      new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
+      return Ok("Pokemon unfavorited");
   }
 }
