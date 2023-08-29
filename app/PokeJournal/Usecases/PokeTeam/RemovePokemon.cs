@@ -16,7 +16,7 @@ public class RemovePokemon{
     }
 
     public void Execute(){
-      var pokemonToRemove = _context.PokemonLists.FirstOrDefault(p => p.Id == this.pokemonId);
+      var pokemonToRemove = _context.PokemonLists.Find(this.pokemonId);
 
       if(pokemonToRemove == null){
         return;

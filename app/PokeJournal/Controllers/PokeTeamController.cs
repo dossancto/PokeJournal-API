@@ -79,4 +79,12 @@ public class PokeTeamController : ControllerBase
 
       return new PokemonListDTO(pokemon.DefaultName, pokemon.CustomName, pokemon.ImgURL, pokemon.PokeTeamId, pokemon.PokemonIndex);
   }
+
+  [HttpDelete("RemovePokemon/{pokemonId:Guid}")]
+  public async Task<ActionResult<PokemonListDTO>> RemovePokemonOfTeam(Guid pokemonId)
+  {
+      new PokeTeam.RemovePokemon(_context, pokemonId).Execute();
+
+      return Ok("Pokemon Removed");
+  }
 }
