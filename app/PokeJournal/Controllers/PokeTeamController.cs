@@ -113,7 +113,11 @@ public class PokeTeamController : ControllerBase
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
 
       var user = await new User.Select(_context).FromId(Guid.Parse(userId));
+      var team = await new PokeTeam.Select(_context).FromId(teamId);
 
+      if(team.UserId != user.Id){
+        return StatusCode(403, "You don't have access to this team.");
+      }
 
       await new PokeTeam.RemovePokemon(_context, pokemonId).Execute();
 
