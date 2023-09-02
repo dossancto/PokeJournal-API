@@ -29,7 +29,7 @@ public class Create{
       await _context.SaveChangesAsync();
       var team = saved.Entity;
 
-      new PokeTeam.AddPokemon(_context, 1, "Verdin", team).Execute();
+      await new PokeTeam.AddPokemon(_context, this.pokemonIndex, "", team).Execute();
 
       return team;
     }
