@@ -1,6 +1,8 @@
 # PokeJournal-API
 Api para aplicação [Poke Journal](https://github.com/lu-css/Pokejournal/).
 
+URL para acesso `https://pokejournal-api.onrender.com/`
+
 <div align="center">
 <img src="img/Pokemon.png" height="250px">
 </div>
