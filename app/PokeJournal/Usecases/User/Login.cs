@@ -31,7 +31,7 @@ public class Login{
       var storedUser = _context.Users.FirstOrDefault(user => user.Email == email);
 
       if(storedUser == null){
-        throw new Exception("Email or Password wrong");
+        throw new Exception($"User with email '{email}' not founded");
       }
 
       bool isCredentialsValid = crypto.VerifyPassword(password, storedUser.Password, storedUser.Salt);
