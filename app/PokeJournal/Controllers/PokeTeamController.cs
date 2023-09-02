@@ -67,12 +67,12 @@ public class PokeTeamController : ControllerBase
   public async Task<ActionResult<PokeTeamModel>> CreateTeam(Guid teamId)
   {
       // TODO: Check if the user is the team owner. 
-      // var claimsIdentity = User.Identity as ClaimsIdentity;
-      // var jwthelper = new JwtHelper(claimsIdentity);
+      var claimsIdentity = User.Identity as ClaimsIdentity;
+      var jwthelper = new JwtHelper(claimsIdentity);
 
-      // var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
+      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
 
-      // var user = new User.Select(_context).FromId(Guid.Parse(userId));
+      var user = new User.Select(_context).FromId(Guid.Parse(userId));
 
       new PokeTeam.Delete(_context, teamId).Execute();
 
@@ -98,9 +98,17 @@ public class PokeTeamController : ControllerBase
       return new PokemonListDTO(pokemon.DefaultName, pokemon.CustomName, pokemon.ImgURL, pokemon.PokeTeamId, pokemon.PokemonIndex);
   }
 
-  [HttpDelete("RemovePokemon/{pokemonId:Guid}")]
-  public async Task<ActionResult<PokemonListDTO>> RemovePokemonOfTeam(Guid pokemonId)
+  [HttpDelete("RemovePokemon/{teamId:Guid}/{pokemonId:Guid}")]
+  public async Task<ActionResult<PokemonListDTO>> RemovePokemonOfTeam(Guid teamId, Guid pokemonId)
   {
+      var claimsIdentity = User.Identity as ClaimsIdentity;
+      var jwthelper = new JwtHelper(claimsIdentity);
+
+      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
+
+      var user = new User.Select(_context).FromId(Guid.Parse(userId));
+
+
       new PokeTeam.RemovePokemon(_context, pokemonId).Execute();
 
       return Ok("Pokemon Removed");

@@ -15,7 +15,10 @@ public class Select{
         .Where(pokemon => pokemon.UserId == userId)
         .Select(x => new FavoritePokemonModel {
           Id = x.Id,
-          PokemonIndex = x.PokemonIndex
+          PokemonIndex = x.PokemonIndex,
+          UserId = x.UserId,
+          CreatedAt = x.CreatedAt,
+          UpdatedAt = x.UpdatedAt
           })
         .ToList();
       return pokemons;
