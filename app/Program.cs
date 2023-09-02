@@ -9,7 +9,17 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connect string not found");
+string getConnectionString(){
+  string envConnectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
+
+  if(envConnectionString != null){
+    return envConnectionString;
+  }
+
+  return builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connect string not found");
+}
+
+var connectionString = getConnectionString();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseMySql(connectionString, 
