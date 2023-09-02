@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 using PokeJournal.Providers.PokeAPI; 
@@ -11,10 +13,10 @@ public class Select{
       _context = context;
     }
 
-    public PokeTeamModel FromId(Guid teamId){
-      var team = _context.PokeTeams.Find(teamId);
+    public async Task<PokeTeamModel> FromId(Guid teamId){
+      var team = await _context.PokeTeams.FindAsync(teamId);
 
-      team.Pokemons = _context.PokemonLists
+      team.Pokemons = await _context.PokemonLists
         .Where(x => x.PokeTeamId == teamId)
         .Select(x => new PokemonListModel{
             Id = x.Id,
@@ -24,15 +26,13 @@ public class Select{
             PokemonIndex = x.PokemonIndex,
             ImgURL = x.ImgURL
             })
-        .ToList();
+        .ToListAsync();
 
-      Console.WriteLine(team.Id);
-      Console.WriteLine(team.Pokemons);
       return team;
     }
 
-    public List<PokeTeamModel> AllFromUser(Guid userId){
-      var teams = _context.PokeTeams.Where(team => team.UserId == userId).ToList();
+    public async Task<List<PokeTeamModel>> AllFromUser(Guid userId){
+     var teams = await _context.PokeTeams.Where(team => team.UserId == userId).ToListAsync();
       return teams;
     }
 }

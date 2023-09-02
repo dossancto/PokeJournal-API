@@ -1,9 +1,11 @@
-namespace PokeJournal.Usecases.User;
+using System.Threading.Tasks;
 
 using PokeJournal.Models;
 using PokeJournal.Data;
 using PokeJournal.DTO;
 using PokeJournal.Providers.Criptografy;
+
+namespace PokeJournal.Usecases.User;
 
 public class Register{
     private readonly ApplicationDbContext _context;
@@ -23,7 +25,7 @@ public class Register{
       crypto = new Pbkdf2();
     }
 
-    public UserModel Execute(){
+    public async Task<UserModel> Execute(){
       if (string.IsNullOrEmpty(user.Password)){
         throw new Exception("Password cant be blank");
       }
@@ -34,7 +36,7 @@ public class Register{
       user.Salt = salt;
 
       var savedUser = _context.Users.Add(user);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
       return savedUser.Entity;
     }
 }

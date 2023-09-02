@@ -13,9 +13,11 @@ string getConnectionString(){
   string envConnectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
 
   if(envConnectionString != null){
+    Console.WriteLine("Using Environment database");
     return envConnectionString;
   }
 
+  Console.WriteLine("Using development database");
   return builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connect string not found");
 }
 

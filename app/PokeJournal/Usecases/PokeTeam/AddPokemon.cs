@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 using PokeJournal.Providers.PokeAPI; 
@@ -25,7 +27,7 @@ public class AddPokemon{
 
     }
 
-    public PokemonListModel Execute(){
+    public async Task<PokemonListModel> Execute(){
       Valid();
 
       this.pokemon.PokeTeam = this.team;
@@ -34,7 +36,7 @@ public class AddPokemon{
 
       this.pokemon.DefaultName = pokemonInfos.name;
 
-      return Save();
+      return await Save();
     }
 
     private void Valid(){
@@ -57,9 +59,9 @@ public class AddPokemon{
       return pokemonInfos;
     }
 
-    private PokemonListModel Save(){
+    private async Task<PokemonListModel> Save(){
       var savedPokemon = _context.PokemonLists.Add(this.pokemon);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
       return savedPokemon.Entity;
     }
 }

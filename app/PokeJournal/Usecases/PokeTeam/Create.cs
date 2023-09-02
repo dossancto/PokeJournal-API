@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 using PokeJournal.DTO;
@@ -22,9 +24,9 @@ public class Create{
       };
     }
 
-    public PokeTeamModel Execute(){
+    public async Task<PokeTeamModel> Execute(){
       var saved = _context.PokeTeams.Add(this.pokemonTeam);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
       var team = saved.Entity;
 
       new PokeTeam.AddPokemon(_context, 1, "Verdin", team).Execute();

@@ -29,7 +29,7 @@ public class PokemonController : ControllerBase
   [AllowAnonymous]
   public async Task<ActionResult<List<FavoritePokemonModel>>> AllFromUser(Guid userId)
   {
-      var r = new Pokemon.Select(_context).AllFromUser(userId);
+      var r = await new Pokemon.Select(_context).AllFromUser(userId);
       return r;
   }
 
@@ -39,9 +39,9 @@ public class PokemonController : ControllerBase
       var claimsIdentity = User.Identity as ClaimsIdentity;
       var jwthelper = new JwtHelper(claimsIdentity);
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-      var user = new User.Select(_context).FromId(Guid.Parse(userId));
+      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
 
-      var r = new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
+      var r = await new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
       r.User = null;
       return r;
   }
@@ -52,9 +52,9 @@ public class PokemonController : ControllerBase
       var claimsIdentity = User.Identity as ClaimsIdentity;
       var jwthelper = new JwtHelper(claimsIdentity);
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-      var user = new User.Select(_context).FromId(Guid.Parse(userId));
+      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
 
-      new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
+      await new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
       return Ok("Pokemon unfavorited");
   }
 }

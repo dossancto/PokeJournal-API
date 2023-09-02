@@ -29,7 +29,7 @@ public class PokeTeamController : ControllerBase
   [HttpGet("List/{userId:Guid}")]
   public async Task<ActionResult<List<PokeTeamModel>>> ListTeams(Guid userId)
   {
-    var teams = new PokeTeam.Select(_context).AllFromUser(userId);
+    var teams = await new PokeTeam.Select(_context).AllFromUser(userId);
 
     return teams;
   }
@@ -38,7 +38,7 @@ public class PokeTeamController : ControllerBase
   [AllowAnonymous]
   public async Task<ActionResult<PokeTeamModel>> ShowTeam(Guid id)
   {
-    var team = new PokeTeam.Select(_context).FromId(id);
+    var team = await new PokeTeam.Select(_context).FromId(id);
 
     return team;
   }
@@ -52,8 +52,8 @@ public class PokeTeamController : ControllerBase
 
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
 
-      var user = new User.Select(_context).FromId(Guid.Parse(userId));
-      var team = new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
+      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
+      var team = await new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
 
       team.User = null;
 
@@ -72,9 +72,9 @@ public class PokeTeamController : ControllerBase
 
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
 
-      var user = new User.Select(_context).FromId(Guid.Parse(userId));
+      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
 
-      new PokeTeam.Delete(_context, teamId).Execute();
+      await new PokeTeam.Delete(_context, teamId).Execute();
 
       return Ok("Team deleted");
   }
@@ -87,13 +87,13 @@ public class PokeTeamController : ControllerBase
       var jwthelper = new JwtHelper(claimsIdentity);
       var userId = Guid.Parse(jwthelper.GetClaimValue(ClaimTypes.NameIdentifier));
 
-      var team = new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
+      var team = await new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
 
       if(team.UserId != userId){
         return StatusCode(403, "You don't have access to this team.");
       }
 
-      var pokemon = new PokeTeam.AddPokemon(_context, addpokemonDTO.pokemonIndex, addpokemonDTO.customName, team).Execute();
+      var pokemon = await new PokeTeam.AddPokemon(_context, addpokemonDTO.pokemonIndex, addpokemonDTO.customName, team).Execute();
 
       return new PokemonListDTO(pokemon.DefaultName, pokemon.CustomName, pokemon.ImgURL, pokemon.PokeTeamId, pokemon.PokemonIndex);
   }
@@ -106,10 +106,10 @@ public class PokeTeamController : ControllerBase
 
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
 
-      var user = new User.Select(_context).FromId(Guid.Parse(userId));
+      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
 
 
-      new PokeTeam.RemovePokemon(_context, pokemonId).Execute();
+      await new PokeTeam.RemovePokemon(_context, pokemonId).Execute();
 
       return Ok("Pokemon Removed");
   }

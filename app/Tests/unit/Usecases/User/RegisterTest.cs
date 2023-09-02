@@ -25,9 +25,9 @@ public class RegisterUserTest: IDisposable
     }
 
     [Fact]
-    public void SuccessfullRegisterUser()
+    public async Task SuccessfullRegisterUser()
     {
-      var user = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+      var user = await new User.Register(_context, "test user", "test@email.com", "test123").Execute();
 
       Assert.NotEqual("test123", user.Password);
 
@@ -37,16 +37,16 @@ public class RegisterUserTest: IDisposable
     }
 
     [Fact]
-    public void FailOnEmptyPassword(){
+    public async Task FailOnEmptyPassword(){
       var c = new User.Register(_context, "test user", "test@email.com", "");
 
-      Assert.Throws<Exception>(() => c.Execute());
+      await Assert.ThrowsAsync<Exception>(async () => await c.Execute());
     }
 
     [Fact]
-    public void FailOnEmptyInfos(){
-      var u = new User.Register(_context, "", null, "a");
+    public async Task FailOnEmptyInfos(){
+      var u =  new User.Register(_context, "", null, "a");
 
-      Assert.Throws<DbUpdateException>(() => u.Execute());
+      await Assert.ThrowsAsync<DbUpdateException>(async () => await u.Execute());
     }
 }

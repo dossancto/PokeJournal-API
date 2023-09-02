@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 
@@ -17,15 +19,16 @@ public class Favorite{
       };
     }
 
-    public FavoritePokemonModel Execute(){
-      var isFavorite = _context.FavoritePokemons.FirstOrDefault(p => p.PokemonIndex == this.favorite.PokemonIndex && p.UserId == this.favorite.User.Id);
+    public async Task<FavoritePokemonModel> Execute(){
+      var isFavorite = await _context.FavoritePokemons
+        .FirstOrDefaultAsync(p => p.PokemonIndex == this.favorite.PokemonIndex && p.UserId == this.favorite.User.Id);
 
       if(isFavorite != null){
         return isFavorite;
       }
 
       var saved = _context.FavoritePokemons.Add(this.favorite);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
       return saved.Entity;
     }
 }

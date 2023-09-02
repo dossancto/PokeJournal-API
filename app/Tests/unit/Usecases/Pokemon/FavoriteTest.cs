@@ -29,10 +29,10 @@ public class FavoriteTest: IDisposable
     }
 
     [Fact]
-    public void Successfull_FavoritePokemon()
+    public async Task Successfull_FavoritePokemon()
     {
-      var user = _baseUser.Execute();
-      var inserted = new Pokemon.Favorite(_context, user, 1).Execute();
+      var user = await _baseUser.Execute();
+      var inserted = await new Pokemon.Favorite(_context, user, 1).Execute();
 
       Assert.NotEqual(Guid.Empty, inserted.Id);
       Assert.Equal(user.Id, inserted.User.Id);
@@ -40,11 +40,11 @@ public class FavoriteTest: IDisposable
     }
 
     [Fact]
-    public void Success_SamePokemon()
+    public async Task Success_SamePokemon()
     {
-      var user = _baseUser.Execute();
-      new Pokemon.Favorite(_context, user, 1).Execute();
-      var favorite = new Pokemon.Favorite(_context, user, 1).Execute();
+      var user = await _baseUser.Execute();
+      await new Pokemon.Favorite(_context, user, 1).Execute();
+      var favorite = await new Pokemon.Favorite(_context, user, 1).Execute();
 
       Assert.NotEqual(Guid.Empty, favorite.Id);
       Assert.Single(user.FavoritePokemons);

@@ -21,7 +21,9 @@ public class CreateTest: IDisposable
         .Options;
 
         _context = new ApplicationDbContext(options);
-        _user = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        var createUser = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        createUser.Wait();
+        _user = createUser.Result;
     }
 
     public void Dispose()
@@ -30,9 +32,9 @@ public class CreateTest: IDisposable
     }
 
     [Fact]
-    public void SuccessfullCreateNewTeam()
+    public async Task SuccessfullCreateNewTeam()
     {
-      var inserted = new PokeTeam.Create(_context, _user, 1, "My First Team", "Some description").Execute();
+      var inserted = await new PokeTeam.Create(_context, _user, 1, "My First Team", "Some description").Execute();
 
       Assert.NotEqual(Guid.Empty, inserted.Id);
       Assert.Equal("My First Team", inserted.Name);

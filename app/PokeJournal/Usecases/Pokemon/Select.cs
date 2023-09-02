@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 
@@ -10,8 +12,8 @@ public class Select{
       _context = context;
     }
 
-    public List<FavoritePokemonModel> AllFromUser(Guid userId){
-      var pokemons = _context.FavoritePokemons
+    public async Task<List<FavoritePokemonModel>> AllFromUser(Guid userId){
+      var pokemons = await _context.FavoritePokemons
         .Where(pokemon => pokemon.UserId == userId)
         .Select(x => new FavoritePokemonModel {
           Id = x.Id,
@@ -20,7 +22,7 @@ public class Select{
           CreatedAt = x.CreatedAt,
           UpdatedAt = x.UpdatedAt
           })
-        .ToList();
+        .ToListAsync();
       return pokemons;
     }
 }

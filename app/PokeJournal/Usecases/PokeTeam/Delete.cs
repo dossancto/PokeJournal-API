@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 
@@ -13,14 +15,14 @@ public class Delete{
       this.teamId = id;
     }
 
-    public void Execute(){
-      var teamToRemove = _context.PokeTeams.FirstOrDefault(p => p.Id == this.teamId);
+    public async Task Execute(){
+      var teamToRemove = await _context.PokeTeams.FirstOrDefaultAsync(p => p.Id == this.teamId);
 
       if(teamToRemove == null){
         return;
       }
 
       _context.PokeTeams.Remove(teamToRemove);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
     }
 }

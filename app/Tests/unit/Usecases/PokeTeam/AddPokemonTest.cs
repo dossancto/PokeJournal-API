@@ -21,7 +21,9 @@ public class AddPokemonTest: IDisposable
 
         _context = new ApplicationDbContext(options);
 
-        var user = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        var createUser = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        createUser.Wait();
+        var user = createUser.Result;
         _baseTeam = new PokeTeam.Create(_context, user, 1, "My First Team", "Some description");
     }
 
@@ -31,10 +33,10 @@ public class AddPokemonTest: IDisposable
     }
 
     [Fact]
-    public void SuccessfullCreateNewPokemon()
+    public async Task SuccessfullCreateNewPokemon()
     {
-      var team = _baseTeam.Execute();
-      var insertedPokemon = new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
+      var team = await _baseTeam.Execute();
+      var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
 
       Assert.NotEqual(Guid.Empty, insertedPokemon.Id);
       Assert.Equal("Vermelin", insertedPokemon.CustomName);
@@ -43,29 +45,29 @@ public class AddPokemonTest: IDisposable
     }
 
     [Fact]
-    public void FailOnNotFoundedPokemon()
+    public async Task FailOnNotFoundedPokemon()
     {
-      var team = _baseTeam.Execute();
+      var team = await _baseTeam.Execute();
       var insertedPokemon = new PokeTeam.AddPokemon(_context, 99999999, "Nobody", team);
 
-      var exception = Assert.Throws<Exception>(() => insertedPokemon.Execute());
+      var exception = await Assert.ThrowsAsync<Exception>(async () => await insertedPokemon.Execute());
       Assert.Equal("Pokemon with index: '99999999', Not Founded", exception.Message);
       Assert.Single(team.Pokemons);
     }
 
     [Fact]
-    public void FailOn_MaxPokemon()
+    public async Task FailOn_MaxPokemon()
     {
-      var team = _baseTeam.Execute();
+      var team = await _baseTeam.Execute();
 
-      new PokeTeam.AddPokemon(_context, 1, "one", team).Execute();
-      new PokeTeam.AddPokemon(_context, 2, "two", team).Execute();
-      new PokeTeam.AddPokemon(_context, 3, "tree", team).Execute();
-      new PokeTeam.AddPokemon(_context, 4, "four", team).Execute();
+      await new PokeTeam.AddPokemon(_context, 1, "one", team).Execute();
+      await new PokeTeam.AddPokemon(_context, 2, "two", team).Execute();
+      await new PokeTeam.AddPokemon(_context, 3, "tree", team).Execute();
+      await new PokeTeam.AddPokemon(_context, 4, "four", team).Execute();
 
       var insertPokemon = new PokeTeam.AddPokemon(_context, 4, "Premiado", team);
 
-      var exception = Assert.Throws<Exception>(() => insertPokemon.Execute());
+      var exception = await Assert.ThrowsAsync<Exception>(async () => await insertPokemon.Execute());
       Assert.Equal("You can have only five pokemons on a team.", exception.Message);
 
       Assert.Equal(5, team.Pokemons.Count);

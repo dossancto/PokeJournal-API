@@ -21,7 +21,10 @@ public class RemovePokemonTest: IDisposable
 
         _context = new ApplicationDbContext(options);
 
-        var user = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        var createUser = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        createUser.Wait();
+        var user = createUser.Result;
+
         _baseTeam = new PokeTeam.Create(_context, user, 1, "My First Team", "Some description");
     }
 
@@ -31,30 +34,30 @@ public class RemovePokemonTest: IDisposable
     }
 
     [Fact]
-    public void Successfull_RemoveAPokemon()
+    public async Task Successfull_RemoveAPokemon()
     {
-      var team = _baseTeam.Execute();
-      var insertedPokemon = new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
+      var team = await _baseTeam.Execute();
+      var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
 
       Assert.Equal(2, team.Pokemons.Count);
 
-      new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
+      await new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
 
       Assert.Single(team.Pokemons);
     }
 
     [Fact]
-    public void Successfull_RemoveAllPokemons()
+    public async Task Successfull_RemoveAllPokemons()
     {
-      var team = _baseTeam.Execute();
-      var insertedPokemon = new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
+      var team = await _baseTeam.Execute();
+      var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
 
       Assert.Equal(2, team.Pokemons.Count);
 
       PokemonListModel firstPokemon = team.Pokemons.FirstOrDefault();
 
-      new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
-      new PokeTeam.RemovePokemon(_context, firstPokemon.Id).Execute();
+      await new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
+      await new PokeTeam.RemovePokemon(_context, firstPokemon.Id).Execute();
 
       Assert.Empty(team.Pokemons);
     }

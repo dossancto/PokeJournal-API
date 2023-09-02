@@ -1,11 +1,13 @@
-namespace PokeJournal.Usecases.User;
-
 using System.Text;
+
+using Microsoft.EntityFrameworkCore;
 
 using PokeJournal.Models;
 using PokeJournal.Data;
 using PokeJournal.DTO;
 using PokeJournal.Providers.Criptografy;
+
+namespace PokeJournal.Usecases.User;
 
 public class Login{
     private readonly ApplicationDbContext _context;
@@ -24,11 +26,11 @@ public class Login{
       crypto = new Pbkdf2();
     }
 
-    public UserModel Execute(){
+    public async Task<UserModel> Execute(){
       string email = this.userdto.Email; 
       string password = this.userdto.Password;
 
-      var storedUser = _context.Users.FirstOrDefault(user => user.Email == email);
+      var storedUser = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
 
       if(storedUser == null){
         throw new Exception($"User with email '{email}' not founded");

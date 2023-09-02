@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 using PokeJournal.Providers.PokeAPI; 
@@ -11,8 +13,8 @@ public class Select{
       _context = context;
     }
 
-    public UserModel FromId(Guid userId){
-      var user = _context.Users.FirstOrDefault(user => user.Id == userId);
+    public async Task<UserModel> FromId(Guid userId){
+      var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
       return user;
     }
 }

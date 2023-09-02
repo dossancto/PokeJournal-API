@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using PokeJournal.Data;
 using PokeJournal.Models;
 
@@ -14,14 +16,14 @@ public class Unfavorite{
       this.pokemonIndex = pokemonIndex;
     }
 
-    public void Execute(){
-      var pokemonToRemove = _context.FavoritePokemons.FirstOrDefault(p => p.PokemonIndex == this.pokemonIndex);
+    public async Task Execute(){
+      var pokemonToRemove = await _context.FavoritePokemons.FirstOrDefaultAsync(p => p.PokemonIndex == this.pokemonIndex);
 
       if(pokemonToRemove == null){
         return;
       }
 
       _context.FavoritePokemons.Remove(pokemonToRemove);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
     }
 }
