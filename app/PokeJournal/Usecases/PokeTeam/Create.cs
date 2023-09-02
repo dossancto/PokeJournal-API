@@ -12,8 +12,9 @@ public class Create{
     private readonly int pokemonIndex;
 
     public Create(ApplicationDbContext context, UserModel user, PokeTeamDTO dto): this(context, user, dto.pokemonIndex, dto.name, dto.description) {}
+    public Create(ApplicationDbContext context, UserModel user, int pokemonIndex, string name): this(context, user, pokemonIndex, name, "") {}
 
-    public Create(ApplicationDbContext context, UserModel user, int pokemonIndex, string name, string description = ""){
+    public Create(ApplicationDbContext context, UserModel user, int pokemonIndex, string name, string description){
       _context = context;
 
       this.pokemonIndex = pokemonIndex;

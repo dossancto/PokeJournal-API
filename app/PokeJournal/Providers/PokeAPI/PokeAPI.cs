@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace PokeJournal.Providers.PokeAPI; 
 
 public class PokeAPI: IPokeAPIProvider {
-    public readonly string BASE_URL = "https://pokeapi.co/api/v2";
+    private readonly string BASE_URL = "https://pokeapi.co/api/v2";
 
     public async Task<PokemonResponse>? GetBasicInfos(string query){
       var url = $"{BASE_URL}/pokemon/{query}";
