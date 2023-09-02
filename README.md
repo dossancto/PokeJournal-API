@@ -1,4 +1,7 @@
 # PokeJournal-API
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/8e16eaa996374115900d7f0bb5ce40c3)](https://app.codacy.com/gh/lu-css/PokeJournal-API/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 Api para aplicação [Poke Journal](https://github.com/lu-css/Pokejournal/).
 
 URL para acesso `https://pokejournal-api.onrender.com/`
@@ -27,6 +30,4 @@ As novas funcionalidades são “Favoritar” e “Adicionar equipe” ambos rel
 
 <img src="img/der-certo.jpg" alt="der" />
 
-## Qualidade do código (Codacy)
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/8e16eaa996374115900d7f0bb5ce40c3)](https://app.codacy.com/gh/lu-css/PokeJournal-API/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
