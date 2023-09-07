@@ -10,10 +10,15 @@ public class JwtHelper{
       _claimsIdentity = claimsIdentity;
     }
 
-    public string GetClaimValue(string claimType)
+    public string? GetClaimValue(string claimType)
     {
        var claim = _claimsIdentity.Claims.FirstOrDefault(c => c.Type == claimType);
-       return claim?.Value;
+
+       if(claim == null){
+         return null;
+       }
+
+       return claim.Value;
     }
 }
 

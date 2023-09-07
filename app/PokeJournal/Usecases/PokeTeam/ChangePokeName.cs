@@ -8,7 +8,7 @@ namespace PokeJournal.Usecases.PokeTeam;
 
 public class ChangePokeName{
     private readonly ApplicationDbContext _context;
-    private readonly PokemonListModel pokemon;
+    private readonly PokemonListModel? pokemon;
     private readonly string newName;
 
     public ChangePokeName(ApplicationDbContext context, Guid pokeId, string newName){
@@ -34,7 +34,7 @@ public class ChangePokeName{
       return this.pokemon;
     }
 
-    private PokemonListModel LoadFromId(Guid id){
+    private PokemonListModel? LoadFromId(Guid id){
       return _context.PokemonLists.Find(id);
     }
 }

@@ -27,8 +27,12 @@ public class Login{
     }
 
     public async Task<UserModel> Execute(){
-      string email = this.userdto.Email; 
-      string password = this.userdto.Password;
+      string? email = this.userdto.Email;
+      string? password = this.userdto.Password;
+
+      if(email == null || password == null){
+        throw new Exception("Pleace inform an Email and Password");
+      }
 
       var storedUser = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
 
@@ -36,7 +40,7 @@ public class Login{
         throw new Exception($"User with email '{email}' not founded");
       }
 
-      bool isCredentialsValid = crypto.VerifyPassword(password, storedUser.Password, storedUser.Salt);
+      bool isCredentialsValid = crypto.VerifyPassword(password, storedUser.Password ?? "", storedUser.Salt ?? "");
 
       if (!isCredentialsValid){
         throw new Exception("Email or Password wrong");

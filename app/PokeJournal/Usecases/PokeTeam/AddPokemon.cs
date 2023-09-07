@@ -32,7 +32,7 @@ public class AddPokemon{
 
       this.pokemon.PokeTeam = this.team;
 
-      var pokemonInfos = GetPokemonInfos();
+      var pokemonInfos = await GetPokemonInfos();
 
       this.pokemon.DefaultName = pokemonInfos.name;
 
@@ -49,8 +49,9 @@ public class AddPokemon{
       }
     }
 
-    private PokemonResponse GetPokemonInfos(){
-      var pokemonInfos = _pokeApi.GetBasicInfos(this.pokemon.PokemonIndex.ToString()).Result;
+    private async Task<PokemonResponse> GetPokemonInfos(){
+      var pokemonInfos = await this._pokeApi
+        .GetBasicInfos(this.pokemon.PokemonIndex.ToString());
 
       if (pokemonInfos == null || pokemonInfos.name == null){
         throw new Exception($"Pokemon with index: '{this.pokemon.PokemonIndex}', Not Founded");

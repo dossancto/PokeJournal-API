@@ -36,8 +36,17 @@ public class PokemonController : ControllerBase
   [HttpPost("Favorite/{pokemonIndex}")]
   public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
   {
-      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+      if(userId == Guid.Empty) {
+        return NotFound("User not founded.");
+      }
+
       var user = await new User.Select(_context).FromId(userId);
+
+      if(user == null) {
+        return NotFound("User not founded.");
+      }
 
       var r = await new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
       r.User = null;
@@ -47,7 +56,12 @@ public class PokemonController : ControllerBase
   [HttpPost("Unfavorite/{pokemonIndex}")]
   public async Task<ActionResult<FavoritePokemonModel>> Unfavorite(int pokemonIndex)
   {
-      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+      if(userId == Guid.Empty) {
+        return NotFound("User not founded.");
+      }
+
       var user = await new User.Select(_context).FromId(userId);
 
       await new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();

@@ -14,7 +14,7 @@ public class Select{
       _context = context;
     }
 
-    public async Task<PokeTeamModel> FromId(Guid teamId){
+    public async Task<PokeTeamModel?> FromId(Guid teamId){
       var team = await _context.PokeTeams
         .Include(t => t.Pokemons)
         .FirstOrDefaultAsync(t => t.Id == teamId);

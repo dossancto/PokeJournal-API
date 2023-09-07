@@ -23,15 +23,26 @@ public class AuthMiddleware
 
     public async Task InvokeAsync(HttpContext context, ApplicationDbContext dbcontext)
     {
-
       if (!context.User.Identity.IsAuthenticated) {
         await _next(context);
         return;
       }
 
       var claimsIdentity = context.User.Identity as ClaimsIdentity;
+
+      if(claimsIdentity == null){
+        await _next(context);
+        return;
+      }
+
       var jwthelper = new JwtHelper(claimsIdentity);
       var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
+
+      if(userId == null){
+        await _next(context);
+        return;
+      }
+
       var user = await new User.Select(dbcontext).FromId(Guid.Parse(userId));
 
       if(user == null){
@@ -41,9 +52,9 @@ public class AuthMiddleware
 
       var claims = new[]
       {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString() ?? Guid.Empty.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName ?? ""),
+        new Claim(ClaimTypes.Email, user.Email ?? ""),
       };
 
       var identity = new ClaimsIdentity(claims, "custom");
@@ -53,6 +64,7 @@ public class AuthMiddleware
       await _next(context);
     }
 }
+
 public static class AuthMiddlewareExtensions
 {
     public static IApplicationBuilder UseAuthMiddleWare(

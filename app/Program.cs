@@ -32,7 +32,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 26))));
 
 
-string jwtSecretKey = Environment.GetEnvironmentVariable("JWY_SECRET_KEY");
+string jwtSecretKey = Environment.GetEnvironmentVariable("JWY_SECRET_KEY") ?? throw new InvalidOperationException("\"JWT Sercret key\" Not founded. Pleace check the env variable");
 
 builder.Services.AddAuthentication(options =>
 {

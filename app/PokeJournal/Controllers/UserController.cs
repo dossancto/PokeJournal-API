@@ -34,7 +34,7 @@ public class UserController : ControllerBase
   public async Task<ActionResult<TokenDTO>> Login(UserDTO userDTO)
   {
       var user = await new User.Login(_context, userDTO.email, userDTO.password).Execute();
-      var u = new UserDTO(user.Id, user.UserName, user.Email, "");
+      var u = new UserDTO(user.Id, user.UserName ?? "", user.Email ?? "", "");
       var token = this.tokenProvider.Hash(u);
 
       return new TokenDTO(token, u);

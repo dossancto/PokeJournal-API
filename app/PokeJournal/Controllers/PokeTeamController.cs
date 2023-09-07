@@ -61,7 +61,12 @@ public class PokeTeamController : ControllerBase
   [Route("New")]
   public async Task<ActionResult<PokeTeamModel>> CreateTeam(PokeTeamDTO teamDTO)
   {
-      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+
+      if(userId == Guid.Empty) {
+        return NotFound("User not founded.");
+      }
 
       var team = await (await new PokeTeam.Create(_context, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).FromUserId(userId)).Execute();
       team.User = null;
@@ -80,7 +85,12 @@ public class PokeTeamController : ControllerBase
   [HttpDelete("Delete/{teamId:Guid}")]
   public async Task<ActionResult<PokeTeamModel>> CreateTeam(Guid teamId)
   {
-      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+
+      if(userId == Guid.Empty) {
+        return NotFound("User not founded.");
+      }
 
       var team = await new PokeTeam.Select(_context).FromId(teamId);
 
@@ -97,7 +107,12 @@ public class PokeTeamController : ControllerBase
   [Route("AddPokemon")]
   public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
   {
-      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+
+      if(userId == Guid.Empty) {
+        return NotFound("User not founded.");
+      }
 
       var team = await new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
 
@@ -113,9 +128,18 @@ public class PokeTeamController : ControllerBase
   [HttpDelete("RemovePokemon/{teamId:Guid}/{pokemonId:Guid}")]
   public async Task<ActionResult<PokemonListDTO>> RemovePokemonOfTeam(Guid teamId, Guid pokemonId)
   {
-      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+
+      if(userId == Guid.Empty) {
+        return NotFound("User not founded.");
+      }
 
       var team = await new PokeTeam.Select(_context).FromId(teamId);
+
+      if(team == null){
+        return NotFound($"Team with id: '{teamId}' not founded.");
+      }
 
       if(team.UserId != userId){
         return StatusCode(403, "You don't have access to this team.");
@@ -129,6 +153,6 @@ public class PokeTeamController : ControllerBase
   [AllowAnonymous]
   [HttpPut("/ChangePokemonName/{pokeId:Guid}")]
   public async Task<ActionResult<PokemonListModel>> ChangePokemonName(Guid pokeId, string? newName){
-      return await new PokeTeam.ChangePokeName(_context, pokeId, newName).Execute();
+      return await new PokeTeam.ChangePokeName(_context, pokeId, newName ?? "").Execute();
   }
 }

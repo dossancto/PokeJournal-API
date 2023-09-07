@@ -16,7 +16,7 @@ public class PokeTeamModel {
     public ICollection<PokemonListModel> Pokemons {get; set;} = default!;
 
     public Guid UserId;
-    public UserModel User;
+    public UserModel User = default!;
 
     public DateTime CreatedAt {get; set;} = DateTime.Now;
     public DateTime UpdatedAt {get; set;} = DateTime.Now;

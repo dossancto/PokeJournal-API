@@ -9,25 +9,29 @@ namespace PokeJournal.Usecases.PokeTeam;
 
 public class Create{
     private readonly ApplicationDbContext _context;
-    private PokeTeamModel pokemonTeam;
+    private PokeTeamModel? pokemonTeam;
 
     private readonly int pokemonIndex;
     private readonly string name;
     private readonly string description;
 
     public Create(ApplicationDbContext context, PokeTeamDTO dto): this(context, dto.pokemonIndex, dto.name, dto.description) {}
-    public Create(ApplicationDbContext context, int pokemonIndex, string name): this(context, pokemonIndex, name, "") {}
+    public Create(ApplicationDbContext context, int pokemonIndex, string? name): this(context, pokemonIndex, name, "") {}
 
-    public Create(ApplicationDbContext context, int pokemonIndex, string name, string description){
+    public Create(ApplicationDbContext context, int pokemonIndex, string? name, string? description){
       _context = context;
       this.pokemonIndex = pokemonIndex;
 
-      this.name = name;
-      this.description = description;
+      this.name = name ?? "";
+      this.description = description ?? "";
     }
 
     public async Task<Create> FromUserId(Guid userId){
       var user = await new User.Select(_context).FromId(userId);
+
+      if(user == null){
+        throw new Exception($"User with id: \"{userId}\" not founded.");
+      }
 
       this.pokemonTeam = new PokeTeamModel {
         Name = name,

@@ -12,7 +12,7 @@ public class FavoritePokemonModel {
     public int PokemonIndex {get; set;}
 
     public Guid UserId {get; set;}
-    public UserModel User {get; set;}
+    public UserModel? User {get; set;}
 
     public DateTime CreatedAt {get; set;} = DateTime.Now;
     public DateTime UpdatedAt {get; set;} = DateTime.Now;

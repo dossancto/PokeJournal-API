@@ -13,7 +13,7 @@ public class Select{
       _context = context;
     }
 
-    public async Task<UserModel> FromId(Guid userId){
+    public async Task<UserModel?> FromId(Guid userId){
       var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
       return user;
     }
