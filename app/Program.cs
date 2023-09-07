@@ -1,8 +1,12 @@
 using System.Text;
+
 using PokeJournal.Data;
+using PokeJournal.Middlewares;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
 using DotNetEnv;
 Env.Load();
 
@@ -59,6 +63,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseAuthMiddleWare();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

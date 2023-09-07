@@ -25,7 +25,7 @@ public class RemovePokemonTest: IDisposable
         createUser.Wait();
         var user = createUser.Result;
 
-        _baseTeam = new PokeTeam.Create(_context, user, 1, "My First Team", "Some description");
+        var w  = new PokeTeam.Create(_context, 1, "My First Team", "Some description").FromUser(user);
     }
 
     public void Dispose()

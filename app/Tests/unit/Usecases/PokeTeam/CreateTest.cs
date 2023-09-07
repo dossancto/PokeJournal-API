@@ -34,7 +34,7 @@ public class CreateTest: IDisposable
     [Fact]
     public async Task SuccessfullCreateNewTeam()
     {
-      var inserted = await new PokeTeam.Create(_context, _user, 1, "My First Team", "Some description").Execute();
+      var inserted = await new PokeTeam.Create(_context, 1, "My First Team", "Some description").FromUser(_user).Execute();
 
       Assert.NotEqual(Guid.Empty, inserted.Id);
       Assert.Equal("My First Team", inserted.Name);

@@ -36,10 +36,8 @@ public class PokemonController : ControllerBase
   [HttpPost("Favorite/{pokemonIndex}")]
   public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
   {
-      var claimsIdentity = User.Identity as ClaimsIdentity;
-      var jwthelper = new JwtHelper(claimsIdentity);
-      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
+      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var user = await new User.Select(_context).FromId(userId);
 
       var r = await new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
       r.User = null;
@@ -49,10 +47,8 @@ public class PokemonController : ControllerBase
   [HttpPost("Unfavorite/{pokemonIndex}")]
   public async Task<ActionResult<FavoritePokemonModel>> Unfavorite(int pokemonIndex)
   {
-      var claimsIdentity = User.Identity as ClaimsIdentity;
-      var jwthelper = new JwtHelper(claimsIdentity);
-      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
+      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var user = await new User.Select(_context).FromId(userId);
 
       await new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
       return Ok("Pokemon unfavorited");

@@ -24,7 +24,7 @@ public class AddPokemonTest: IDisposable
         var createUser = new User.Register(_context, "test user", "test@email.com", "test123").Execute();
         createUser.Wait();
         var user = createUser.Result;
-        _baseTeam = new PokeTeam.Create(_context, user, 1, "My First Team", "Some description");
+        _baseTeam = new PokeTeam.Create(_context, 1, "My First Team", "Some description").FromUser(user);
     }
 
     public void Dispose()

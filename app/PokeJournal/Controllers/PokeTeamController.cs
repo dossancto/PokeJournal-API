@@ -29,7 +29,15 @@ public class PokeTeamController : ControllerBase
   [HttpGet("List/{userId:Guid}")]
   public async Task<ActionResult<List<PokeTeamModel>>> ListTeams(Guid userId)
   {
-    var teams = await new PokeTeam.Select(_context).AllFromUser(userId);
+    var teams = (await new PokeTeam.Select(_context).AllFromUser(userId))
+      .Select(team => {
+      team.Pokemons = team.Pokemons
+        .Select(p => {
+              p.PokeTeam = null;
+              return p;
+            }).ToList();
+        return team;
+        }).ToList();
 
     return teams;
   }
@@ -40,6 +48,12 @@ public class PokeTeamController : ControllerBase
   {
     var team = await new PokeTeam.Select(_context).FromId(id);
 
+    team.Pokemons = team.Pokemons
+      .Select(p => {
+            p.PokeTeam = null;
+            return p;
+          }).ToList();
+
     return team;
   }
 
@@ -47,15 +61,15 @@ public class PokeTeamController : ControllerBase
   [Route("New")]
   public async Task<ActionResult<PokeTeamModel>> CreateTeam(PokeTeamDTO teamDTO)
   {
-      var claimsIdentity = User.Identity as ClaimsIdentity;
-      var jwthelper = new JwtHelper(claimsIdentity);
+      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-
-      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
-      var team = await new PokeTeam.Create(_context, user, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).Execute();
-
+      var team = await (await new PokeTeam.Create(_context, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).FromUserId(userId)).Execute();
       team.User = null;
+      team.Pokemons = team.Pokemons
+      .Select(p => {
+            p.PokeTeam = null;
+            return p;
+          }).ToList();
 
       return CreatedAtAction(
           nameof(ShowTeam),
@@ -66,17 +80,11 @@ public class PokeTeamController : ControllerBase
   [HttpDelete("Delete/{teamId:Guid}")]
   public async Task<ActionResult<PokeTeamModel>> CreateTeam(Guid teamId)
   {
-      // TODO: Check if the user is the team owner. 
-      var claimsIdentity = User.Identity as ClaimsIdentity;
-      var jwthelper = new JwtHelper(claimsIdentity);
-
-      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-
-      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
+      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
       var team = await new PokeTeam.Select(_context).FromId(teamId);
 
-      if(team.UserId != user.Id){
+      if(team.UserId != userId){
         return StatusCode(403, "You don't have access to this team.");
       }
 
@@ -89,9 +97,7 @@ public class PokeTeamController : ControllerBase
   [Route("AddPokemon")]
   public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
   {
-      var claimsIdentity = User.Identity as ClaimsIdentity;
-      var jwthelper = new JwtHelper(claimsIdentity);
-      var userId = Guid.Parse(jwthelper.GetClaimValue(ClaimTypes.NameIdentifier));
+      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
       var team = await new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
 
@@ -107,20 +113,22 @@ public class PokeTeamController : ControllerBase
   [HttpDelete("RemovePokemon/{teamId:Guid}/{pokemonId:Guid}")]
   public async Task<ActionResult<PokemonListDTO>> RemovePokemonOfTeam(Guid teamId, Guid pokemonId)
   {
-      var claimsIdentity = User.Identity as ClaimsIdentity;
-      var jwthelper = new JwtHelper(claimsIdentity);
+      var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-      var userId = jwthelper.GetClaimValue(ClaimTypes.NameIdentifier);
-
-      var user = await new User.Select(_context).FromId(Guid.Parse(userId));
       var team = await new PokeTeam.Select(_context).FromId(teamId);
 
-      if(team.UserId != user.Id){
+      if(team.UserId != userId){
         return StatusCode(403, "You don't have access to this team.");
       }
 
       await new PokeTeam.RemovePokemon(_context, pokemonId).Execute();
 
       return Ok("Pokemon Removed");
+  }
+
+  [AllowAnonymous]
+  [HttpPut("/ChangePokemonName/{pokeId:Guid}")]
+  public async Task<ActionResult<PokemonListModel>> ChangePokemonName(Guid pokeId, string? newName){
+      return await new PokeTeam.ChangePokeName(_context, pokeId, newName).Execute();
   }
 }

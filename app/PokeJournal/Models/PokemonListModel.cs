@@ -14,7 +14,7 @@ public class PokemonListModel {
     [Required]
     public int PokemonIndex {get; set;}
 
-    public string CustomName {get; set;} = default!;
+    public string? CustomName {get; set;}
 
     public string? ImgURL {get; set;}
 
