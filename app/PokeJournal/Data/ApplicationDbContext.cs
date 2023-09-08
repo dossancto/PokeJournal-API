@@ -13,7 +13,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserModel> Users { get; set; } = default!;
     public DbSet<FavoritePokemonModel> FavoritePokemons { get; set; } = default!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<PokemonListModel>()
             .HasOne(a => a.PokeTeam)
             .WithMany(b => b.Pokemons)

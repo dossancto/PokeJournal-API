@@ -9,12 +9,13 @@ using PokeJournal.Models;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-public class UnfavoriteTest: IDisposable
+public class UnfavoriteTest : IDisposable
 {
     private readonly ApplicationDbContext _context;
     private readonly User.Register _baseUser;
 
-    public UnfavoriteTest(){
+    public UnfavoriteTest()
+    {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
         .UseInMemoryDatabase(databaseName: "Poke Journal")
         .Options;
@@ -32,7 +33,7 @@ public class UnfavoriteTest: IDisposable
     [Fact]
     public async Task Successfull_UnfavoritePokemon()
     {
-      var user = await _baseUser.Execute();
-      new Pokemon.Unfavorite(_context, user, 1).Execute();
+        var user = await _baseUser.Execute();
+        new Pokemon.Unfavorite(_context, user, 1).Execute();
     }
 }

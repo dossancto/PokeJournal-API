@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using PokeJournal.Models;
-using PokeJournal.DTO;
 
 using PokeJournal.Data;
-using PokeJournal.Helpers;
 
 using Pokemon = PokeJournal.Usecases.Pokemon;
 using User = PokeJournal.Usecases.User;
@@ -19,52 +17,56 @@ namespace PokeJournal.Controllers;
 [Authorize]
 public class PokemonController : ControllerBase
 {
-  private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext _context;
 
-  public PokemonController(ApplicationDbContext context){
-    _context = context;
-  }
+    public PokemonController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
 
-  [HttpGet("All/{userId:Guid}")]
-  [AllowAnonymous]
-  public async Task<ActionResult<List<FavoritePokemonModel>>> AllFromUser(Guid userId)
-  {
-      var r = await new Pokemon.Select(_context).AllFromUser(userId);
-      return r;
-  }
+    [HttpGet("All/{userId:Guid}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<List<FavoritePokemonModel>>> AllFromUser(Guid userId)
+    {
+        var r = await new Pokemon.Select(_context).AllFromUser(userId);
+        return r;
+    }
 
-  [HttpPost("Favorite/{pokemonIndex}")]
-  public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
-  {
-      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-      if(userId == Guid.Empty) {
-        return NotFound("User not founded.");
-      }
+    [HttpPost("Favorite/{pokemonIndex}")]
+    public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
+    {
+        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+        if (userId == Guid.Empty)
+        {
+            return NotFound("User not founded.");
+        }
 
-      var user = await new User.Select(_context).FromId(userId);
+        var user = await new User.Select(_context).FromId(userId);
 
-      if(user == null) {
-        return NotFound("User not founded.");
-      }
+        if (user == null)
+        {
+            return NotFound("User not founded.");
+        }
 
-      var r = await new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
-      r.User = null;
-      return r;
-  }
+        var r = await new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
+        r.User = null;
+        return r;
+    }
 
-  [HttpPost("Unfavorite/{pokemonIndex}")]
-  public async Task<ActionResult<FavoritePokemonModel>> Unfavorite(int pokemonIndex)
-  {
-      var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-      if(userId == Guid.Empty) {
-        return NotFound("User not founded.");
-      }
+    [HttpPost("Unfavorite/{pokemonIndex}")]
+    public async Task<ActionResult<FavoritePokemonModel>> Unfavorite(int pokemonIndex)
+    {
+        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+        if (userId == Guid.Empty)
+        {
+            return NotFound("User not founded.");
+        }
 
-      var user = await new User.Select(_context).FromId(userId);
+        var user = await new User.Select(_context).FromId(userId);
 
-      await new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
-      return Ok("Pokemon unfavorited");
-  }
+        await new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
+        return Ok("Pokemon unfavorited");
+    }
 }

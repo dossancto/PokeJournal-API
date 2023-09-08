@@ -1,6 +1,7 @@
-namespace PokeJournal.Providers.PokeAPI; 
+namespace PokeJournal.Providers.PokeAPI;
 
-public class PokemonResponse {
-  public int id {get; set;}
-  public string name {get; set;} = default!;
+public class PokemonResponse
+{
+    public int id { get; set; }
+    public string name { get; set; } = default!;
 }

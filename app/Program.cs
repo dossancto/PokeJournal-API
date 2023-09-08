@@ -13,22 +13,24 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
-string getConnectionString(){
-  string envConnectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
+string getConnectionString()
+{
+    string envConnectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
 
-  if(envConnectionString != null){
-    Console.WriteLine("Using Environment database");
-    return envConnectionString;
-  }
+    if (envConnectionString != null)
+    {
+        Console.WriteLine("Using Environment database");
+        return envConnectionString;
+    }
 
-  Console.WriteLine("Using development database");
-  return builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connect string not found");
+    Console.WriteLine("Using development database");
+    return builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connect string not found");
 }
 
 var connectionString = getConnectionString();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseMySql(connectionString, 
+        options.UseMySql(connectionString,
         new MySqlServerVersion(new Version(8, 0, 26))));
 
 
@@ -47,7 +49,7 @@ builder.Services.AddAuthentication(options =>
     {
         ValidIssuer = "",
         ValidAudience = "",
-        IssuerSigningKey = new SymmetricSecurityKey (Encoding.UTF8.GetBytes(jwtSecretKey)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateLifetime = true,

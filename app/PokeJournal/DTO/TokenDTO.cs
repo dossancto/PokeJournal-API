@@ -1,3 +1,3 @@
 namespace PokeJournal.DTO;
 
-public record TokenDTO (string? Token, UserDTO? User){}
+public record TokenDTO(string? Token, UserDTO? User) { }

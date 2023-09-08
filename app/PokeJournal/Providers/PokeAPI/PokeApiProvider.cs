@@ -1,4 +1,4 @@
-namespace PokeJournal.Providers.PokeAPI; 
+namespace PokeJournal.Providers.PokeAPI;
 
 public interface IPokeAPIProvider
 {

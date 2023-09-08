@@ -7,11 +7,12 @@ using PokeJournal.Models;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-public class RegisterUserTest: IDisposable
+public class RegisterUserTest : IDisposable
 {
-  private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext _context;
 
-    public RegisterUserTest(){
+    public RegisterUserTest()
+    {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
         .UseInMemoryDatabase(databaseName: "Organizart")
         .Options;
@@ -27,26 +28,28 @@ public class RegisterUserTest: IDisposable
     [Fact]
     public async Task SuccessfullRegisterUser()
     {
-      var user = await new User.Register(_context, "test user", "test@email.com", "test123").Execute();
+        var user = await new User.Register(_context, "test user", "test@email.com", "test123").Execute();
 
-      Assert.NotEqual("test123", user.Password);
+        Assert.NotEqual("test123", user.Password);
 
-      Assert.Equal("test@email.com", user.Email);
+        Assert.Equal("test@email.com", user.Email);
 
-      Assert.NotEqual(Guid.Empty, user.Id);
+        Assert.NotEqual(Guid.Empty, user.Id);
     }
 
     [Fact]
-    public async Task FailOnEmptyPassword(){
-      var c = new User.Register(_context, "test user", "test@email.com", "");
+    public async Task FailOnEmptyPassword()
+    {
+        var c = new User.Register(_context, "test user", "test@email.com", "");
 
-      await Assert.ThrowsAsync<Exception>(async () => await c.Execute());
+        await Assert.ThrowsAsync<Exception>(async () => await c.Execute());
     }
 
     [Fact]
-    public async Task FailOnEmptyInfos(){
-      var u =  new User.Register(_context, "", null, "a");
+    public async Task FailOnEmptyInfos()
+    {
+        var u = new User.Register(_context, "", null, "a");
 
-      await Assert.ThrowsAsync<DbUpdateException>(async () => await u.Execute());
+        await Assert.ThrowsAsync<DbUpdateException>(async () => await u.Execute());
     }
 }

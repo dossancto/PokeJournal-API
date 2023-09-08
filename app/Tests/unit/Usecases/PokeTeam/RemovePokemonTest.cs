@@ -9,12 +9,13 @@ using PokeJournal.Models;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-public class RemovePokemonTest: IDisposable
+public class RemovePokemonTest : IDisposable
 {
     private readonly ApplicationDbContext _context;
     private readonly PokeTeam.Create _baseTeam;
 
-    public RemovePokemonTest(){
+    public RemovePokemonTest()
+    {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
         .UseInMemoryDatabase(databaseName: "Organizart")
         .Options;
@@ -36,29 +37,29 @@ public class RemovePokemonTest: IDisposable
     [Fact]
     public async Task Successfull_RemoveAPokemon()
     {
-      var team = await _baseTeam.Execute();
-      var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
+        var team = await _baseTeam.Execute();
+        var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
 
-      Assert.Equal(2, team.Pokemons.Count);
+        Assert.Equal(2, team.Pokemons.Count);
 
-      await new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
+        await new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
 
-      Assert.Single(team.Pokemons);
+        Assert.Single(team.Pokemons);
     }
 
     [Fact]
     public async Task Successfull_RemoveAllPokemons()
     {
-      var team = await _baseTeam.Execute();
-      var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
+        var team = await _baseTeam.Execute();
+        var insertedPokemon = await new PokeTeam.AddPokemon(_context, 4, "Vermelin", team).Execute();
 
-      Assert.Equal(2, team.Pokemons.Count);
+        Assert.Equal(2, team.Pokemons.Count);
 
-      PokemonListModel firstPokemon = team.Pokemons.FirstOrDefault();
+        PokemonListModel firstPokemon = team.Pokemons.FirstOrDefault();
 
-      await new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
-      await new PokeTeam.RemovePokemon(_context, firstPokemon.Id).Execute();
+        await new PokeTeam.RemovePokemon(_context, insertedPokemon.Id).Execute();
+        await new PokeTeam.RemovePokemon(_context, firstPokemon.Id).Execute();
 
-      Assert.Empty(team.Pokemons);
+        Assert.Empty(team.Pokemons);
     }
 }

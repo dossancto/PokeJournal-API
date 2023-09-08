@@ -9,13 +9,14 @@ using PokeJournal.Models;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-public class CreateTest: IDisposable
+public class CreateTest : IDisposable
 {
     private readonly ApplicationDbContext _context;
 
     private readonly UserModel _user;
 
-    public CreateTest(){
+    public CreateTest()
+    {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
         .UseInMemoryDatabase(databaseName: "Poke Journal")
         .Options;
@@ -34,10 +35,10 @@ public class CreateTest: IDisposable
     [Fact]
     public async Task SuccessfullCreateNewTeam()
     {
-      var inserted = await new PokeTeam.Create(_context, 1, "My First Team", "Some description").FromUser(_user).Execute();
+        var inserted = await new PokeTeam.Create(_context, 1, "My First Team", "Some description").FromUser(_user).Execute();
 
-      Assert.NotEqual(Guid.Empty, inserted.Id);
-      Assert.Equal("My First Team", inserted.Name);
-      Assert.Single(inserted.Pokemons);
+        Assert.NotEqual(Guid.Empty, inserted.Id);
+        Assert.Equal("My First Team", inserted.Name);
+        Assert.Single(inserted.Pokemons);
     }
 }
