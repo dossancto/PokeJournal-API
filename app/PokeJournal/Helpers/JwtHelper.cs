@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using PokeJournal.DTO;
 
 namespace PokeJournal.Helpers;
 

@@ -10,6 +10,7 @@ using PokeJournal.Data;
 // Use cases
 using PokeTeam = PokeJournal.Usecases.PokeTeam;
 using User = PokeJournal.Usecases.User;
+using PokeJournal.Helpers;
 
 namespace PokeJournal.Controllers;
 
@@ -64,16 +65,10 @@ public class PokeTeamController : ControllerBase
     [Route("New")]
     public async Task<ActionResult<PokeTeamModel>> CreateTeam(PokeTeamDTO teamDTO)
     {
-        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-
-        if (userId == Guid.Empty)
-        {
-            return NotFound("User not founded.");
-        }
+        var userId = AuthHelper.UserId(User);
 
         var team = await (await new PokeTeam.Create(_context, teamDTO.pokemonIndex, teamDTO.name, teamDTO.description).FromUserId(userId)).Execute();
-        team.User = null;
+        team.User = default!;
         team.Pokemons = team.Pokemons
         .Select(p =>
         {
@@ -90,15 +85,9 @@ public class PokeTeamController : ControllerBase
     [HttpDelete("Delete/{teamId:Guid}")]
     public async Task<ActionResult<PokeTeamModel>> CreateTeam(Guid teamId)
     {
-        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
+        var userId = AuthHelper.UserId(User);
 
-        if (userId == Guid.Empty)
-        {
-            return NotFound("User not founded.");
-        }
-
-        var team = await new PokeTeam.Select(_context).FromId(teamId);
+        var team = await new PokeTeam.Select(_context).FromId(teamId) ?? TeamNotFounded(teamId);
 
         if (team.UserId != userId)
         {
@@ -114,13 +103,7 @@ public class PokeTeamController : ControllerBase
     [Route("AddPokemon")]
     public async Task<ActionResult<PokemonListDTO>> AddPokemonToTeam(AddPokemonDTO addpokemonDTO)
     {
-        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-
-        if (userId == Guid.Empty)
-        {
-            return NotFound("User not founded.");
-        }
+        var userId = AuthHelper.UserId(User);
 
         var team = await new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId) ?? TeamNotFounded(addpokemonDTO.teamId);
 
@@ -137,13 +120,7 @@ public class PokeTeamController : ControllerBase
     [HttpDelete("RemovePokemon/{teamId:Guid}/{pokemonId:Guid}")]
     public async Task<ActionResult<PokemonListDTO>> RemovePokemonOfTeam(Guid teamId, Guid pokemonId)
     {
-        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-
-        if (userId == Guid.Empty)
-        {
-            return NotFound("User not founded.");
-        }
+        var userId = AuthHelper.UserId(User);
 
         var team = await new PokeTeam.Select(_context).FromId(teamId) ?? TeamNotFounded(teamId);
 
