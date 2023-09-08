@@ -27,14 +27,16 @@ public class ErrorController : ControllerBase
 
         var error = exceptionHandlerPathFeature?.Error;
 
-        if (error is DbUpdateException dbEx)
+        if (error is DbUpdateException)
         {
-            return StatusCode(400, dbEx.Message);
+            var ex = (DbUpdateException)error;
+            return StatusCode(400, ex.Message);
         }
 
-        if (error is Exception ex)
+        if (error is Exception)
         {
-            return StatusCode(500, "Internal server error.");
+            var ex = error;
+            return StatusCode(500, ex.Message);
         }
 
         return Ok("Everything is okay");

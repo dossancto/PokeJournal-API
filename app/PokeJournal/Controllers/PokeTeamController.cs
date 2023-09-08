@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+// 
 using PokeJournal.Models;
 using PokeJournal.DTO;
 
@@ -48,7 +48,7 @@ public class PokeTeamController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<PokeTeamModel>> ShowTeam(Guid id)
     {
-        var team = await new PokeTeam.Select(_context).FromId(id);
+        var team = await new PokeTeam.Select(_context).FromId(id) ?? TeamNotFounded(id);
 
         team.Pokemons = team.Pokemons
           .Select(p =>
@@ -122,7 +122,7 @@ public class PokeTeamController : ControllerBase
             return NotFound("User not founded.");
         }
 
-        var team = await new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId);
+        var team = await new PokeTeam.Select(_context).FromId(addpokemonDTO.teamId) ?? TeamNotFounded(addpokemonDTO.teamId);
 
         if (team.UserId != userId)
         {
@@ -145,12 +145,7 @@ public class PokeTeamController : ControllerBase
             return NotFound("User not founded.");
         }
 
-        var team = await new PokeTeam.Select(_context).FromId(teamId);
-
-        if (team == null)
-        {
-            return NotFound($"Team with id: '{teamId}' not founded.");
-        }
+        var team = await new PokeTeam.Select(_context).FromId(teamId) ?? TeamNotFounded(teamId);
 
         if (team.UserId != userId)
         {
@@ -167,5 +162,10 @@ public class PokeTeamController : ControllerBase
     public async Task<ActionResult<PokemonListModel>> ChangePokemonName(Guid pokeId, string? newName)
     {
         return await new PokeTeam.ChangePokeName(_context, pokeId, newName ?? "").Execute();
+    }
+
+    private PokeTeamModel TeamNotFounded(Guid id)
+    {
+        throw new Exception($"Team with id \"{id}\" not found.");
     }
 }
