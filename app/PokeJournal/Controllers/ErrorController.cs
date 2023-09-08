@@ -8,8 +8,6 @@ namespace PokeJournal.Controllers;
 [ApiController]
 public class ErrorController : ControllerBase
 {
-    public ErrorController() { }
-
     [HttpGet("/Error")]
     public ActionResult OnGetError()
     {
@@ -28,8 +26,9 @@ public class ErrorController : ControllerBase
 
         var error = exceptionHandlerPathFeature?.Error;
 
-        if(error is NotFoundException){
-            var ex = (NotFoundException) error;
+        if (error is NotFoundException)
+        {
+            var ex = (NotFoundException)error;
             return StatusCode(404, ex.Message);
         }
 

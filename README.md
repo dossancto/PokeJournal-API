@@ -34,12 +34,12 @@ As novas funcionalidades são “Favoritar” e “Adicionar equipe” ambos rel
 
 ### Dependências
 
-- Docker Composer
-- dotnet-ef
+  - Docker Composer
+  - dotnet-ef
 
 ### Instalar
 
-- dotnet-ef
+  - dotnet-ef
 
 ```sh
 dotnet tool install --global dotnet-ef
@@ -53,36 +53,36 @@ Veja o arquivo `.env.example` para instruções de variáveis de ambiente.
 
 ### Rodar
 
-- Clone Project
+  - Clone Project
 ```
 git clone https://github.com/lu-css/PokeJournal-API
 ```
 
-- cd para diretório
+  - cd para diretório
 
 ```sh
 cd PokeJournal-API/app
 ```
 
-- Instalar Dependencias
+  - Instalar Dependencias
 
 ```sh
 dotnet restore
 ```
 
-- Iniciar MySQL no docker-composer
+  - Iniciar MySQL no docker-composer
 
 ```sh
 docker compose up -d
 ```
 
-- Rodar Migrations
+  - Rodar Migrations
 
 ```sh
 dotnet ef database update
 ```
 
-- Rodar
+  - Rodar
 ```sh
 dotnet run
 ```

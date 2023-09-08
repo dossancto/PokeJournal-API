@@ -57,7 +57,8 @@ public class PokemonController : ControllerBase
         return Ok("Pokemon unfavorited");
     }
 
-    private UserModel UserNotFounded(){
+    private UserModel UserNotFounded()
+    {
         throw new NotFoundException("User not founded.");
     }
 }

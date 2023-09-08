@@ -9,11 +9,6 @@ namespace PokeJournal.Providers.TokenProvider;
 
 public class Jwt : ITokenProvider
 {
-    public Jwt()
-    {
-        // Env.Load();
-    }
-
     public string Hash(UserDTO user)
     {
         string jwtSecretKey = Environment.GetEnvironmentVariable("JWY_SECRET_KEY") ?? throw new InvalidOperationException("\"JWT Sercret key\" Not founded. Pleace check the env variable");
