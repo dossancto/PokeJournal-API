@@ -37,7 +37,7 @@ public class Login{
       var storedUser = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
 
       if(storedUser == null){
-        throw new Exception($"User with email '{email}' not founded");
+        throw new Exception($"User with email '{email}' not founded. Consider Create a new Account.");
       }
 
       bool isCredentialsValid = crypto.VerifyPassword(password, storedUser.Password ?? "", storedUser.Salt ?? "");
