@@ -10,6 +10,7 @@ using PokeJournal.Data;
 using Pokemon = PokeJournal.Usecases.Pokemon;
 using User = PokeJournal.Usecases.User;
 using PokeJournal.Helpers;
+using PokeJournal.Exceptions;
 
 namespace PokeJournal.Controllers;
 
@@ -38,12 +39,7 @@ public class PokemonController : ControllerBase
     {
         var userId = AuthHelper.UserId(User);
 
-        var user = await new User.Select(_context).FromId(userId);
-
-        if (user == null)
-        {
-            return NotFound("User not founded.");
-        }
+        var user = await new User.Select(_context).FromId(userId) ?? UserNotFounded();
 
         var r = await new Pokemon.Favorite(_context, user, pokemonIndex).Execute();
         r.User = null;
@@ -55,9 +51,13 @@ public class PokemonController : ControllerBase
     {
         var userId = AuthHelper.UserId(User);
 
-        var user = await new User.Select(_context).FromId(userId);
+        var user = await new User.Select(_context).FromId(userId) ?? UserNotFounded();
 
         await new Pokemon.Unfavorite(_context, user, pokemonIndex).Execute();
         return Ok("Pokemon unfavorited");
+    }
+
+    private UserModel UserNotFounded(){
+        throw new NotFoundException("User not founded.");
     }
 }

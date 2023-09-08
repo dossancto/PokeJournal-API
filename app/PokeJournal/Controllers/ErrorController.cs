@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using PokeJournal.Exceptions;
 
 namespace PokeJournal.Controllers;
 
@@ -26,6 +27,11 @@ public class ErrorController : ControllerBase
         var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
         var error = exceptionHandlerPathFeature?.Error;
+
+        if(error is NotFoundException){
+            var ex = (NotFoundException) error;
+            return StatusCode(404, ex.Message);
+        }
 
         if (error is DbUpdateException)
         {

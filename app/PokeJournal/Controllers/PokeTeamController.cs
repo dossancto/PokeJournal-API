@@ -9,8 +9,8 @@ using PokeJournal.Data;
 
 // Use cases
 using PokeTeam = PokeJournal.Usecases.PokeTeam;
-using User = PokeJournal.Usecases.User;
 using PokeJournal.Helpers;
+using PokeJournal.Exceptions;
 
 namespace PokeJournal.Controllers;
 
@@ -143,6 +143,6 @@ public class PokeTeamController : ControllerBase
 
     private PokeTeamModel TeamNotFounded(Guid id)
     {
-        throw new Exception($"Team with id \"{id}\" not found.");
+        throw new NotFoundException($"Team with id \"{id}\" not found.");
     }
 }
