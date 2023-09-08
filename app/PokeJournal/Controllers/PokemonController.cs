@@ -9,6 +9,7 @@ using PokeJournal.Data;
 
 using Pokemon = PokeJournal.Usecases.Pokemon;
 using User = PokeJournal.Usecases.User;
+using PokeJournal.Helpers;
 
 namespace PokeJournal.Controllers;
 
@@ -35,12 +36,7 @@ public class PokemonController : ControllerBase
     [HttpPost("Favorite/{pokemonIndex}")]
     public async Task<ActionResult<FavoritePokemonModel>> Favorite(int pokemonIndex)
     {
-        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-        if (userId == Guid.Empty)
-        {
-            return NotFound("User not founded.");
-        }
+        var userId = AuthHelper.UserId(User);
 
         var user = await new User.Select(_context).FromId(userId);
 
@@ -57,12 +53,7 @@ public class PokemonController : ControllerBase
     [HttpPost("Unfavorite/{pokemonIndex}")]
     public async Task<ActionResult<FavoritePokemonModel>> Unfavorite(int pokemonIndex)
     {
-        var token = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userId = token != null ? Guid.Parse(token) : Guid.Empty;
-        if (userId == Guid.Empty)
-        {
-            return NotFound("User not founded.");
-        }
+        var userId = AuthHelper.UserId(User);
 
         var user = await new User.Select(_context).FromId(userId);
 
