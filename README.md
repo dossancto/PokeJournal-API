@@ -86,3 +86,6 @@ dotnet ef database update
 ```sh
 dotnet run
 ```
+## Funcionamento
+
+https://github.com/lu-css/PokeJournal-API/assets/97306254/24ef6b02-8580-45ca-82fd-ba00f44f1fa1
