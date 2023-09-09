@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "a7acbb6b-2ddb-4fff-b203-ca87b907a262",
+		"name": "PokeAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29489807"
+	},
+	"item": [
+		{
+			"name": "Pokemon",
+			"item": [
+				{
+					"name": "List All Favorites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/Pokemon/All/{{userid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"Pokemon",
+								"All",
+								"{{userid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Favorite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/Pokemon/Favorite/10",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"Pokemon",
+								"Favorite",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfavorite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/Pokemon/Unfavorite/10",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"Pokemon",
+								"Unfavorite",
+								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PokeTeam",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pokemonIndex\": 1,\n  \"name\": \"Fake Team\",\n  \"description\": \"My First Pokemon Team\",\n  \"userId\": \"{{userid}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/PokeTeam/New",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"PokeTeam",
+								"New"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/PokeTeam/List/{{userid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"PokeTeam",
+								"List",
+								"{{userid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/PokeTeam/Delete/08dbb156-ba03-49a9-831c-8fcf2b42f9a1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"PokeTeam",
+								"Delete",
+								"08dbb156-ba03-49a9-831c-8fcf2b42f9a1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Pokemon",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pokemonIndex\": 4,\n  \"customName\": \"Azulzin\",\n  \"teamId\": \"{{teamId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/PokeTeam/AddPokemon",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"PokeTeam",
+								"AddPokemon"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/PokeTeam/{{teamId}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"PokeTeam",
+								"{{teamId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Pokemon",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/PokeTeam/RemovePokemon/{{teamId}}/08dbb156-ba03-49a9-831c-8fcf2b42f9a1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"PokeTeam",
+								"RemovePokemon",
+								"{{teamId}}",
+								"08dbb156-ba03-49a9-831c-8fcf2b42f9a1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangePokemonName",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5286/ChangePokemonName/08dbb156-843d-48fe-89a9-2cb28291a816?newName=Vermelhinho",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5286",
+							"path": [
+								"ChangePokemonName",
+								"08dbb156-843d-48fe-89a9-2cb28291a816"
+							],
+							"query": [
+								{
+									"key": "newName",
+									"value": "Vermelhinho"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"test\",\n  \"email\": \"test@teste.com\",\n  \"password\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/User/Login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"User",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"test\",\n  \"email\": \"test@teste.com\",\n  \"password\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/User/Register",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"User",
+								"Register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3QiLCJuYW1laWQiOiIwOGRiYjE1Ni0zZTMyLTQ5MGQtOGM5Yy1iY2E4NjA3MTBlOWEiLCJuYmYiOjE2OTQyNzg4NTAsImV4cCI6MTY5NDI4MjQ1MCwiaWF0IjoxNjk0Mjc4ODUwfQ.CDK4vohuTBwBcLYkbhn5X4JqOWcPOR96p963e1opzYc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "localhost:5542",
+			"type": "string"
+		},
+		{
+			"key": "userid",
+			"value": "guid",
+			"type": "string"
+		},
+		{
+			"key": "teamId",
+			"value": "guid",
+			"type": "string"
+		}
+	]
+}
