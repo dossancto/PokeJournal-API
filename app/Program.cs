@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 string getConnectionString()
 {
-    string envConnectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
+    string? envConnectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
 
     if (envConnectionString != null)
     {
@@ -71,9 +71,14 @@ app.UseAuthMiddleWare();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // TODO: Change to /DevError and create this route
     app.UseExceptionHandler("/Error");
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
 }
 
 app.UseHttpsRedirection();
