@@ -1,8 +1,4 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-
-using PokeJournal.Models;
-using PokeJournal.DTO;
 
 using PokeJournal.Data;
 

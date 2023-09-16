@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-// 
+
 using PokeJournal.Models;
 using PokeJournal.DTO;
 
 using PokeJournal.Data;
 
-// Use cases
 using PokeTeam = PokeJournal.Usecases.PokeTeam;
 using PokeJournal.Helpers;
 using PokeJournal.Exceptions;

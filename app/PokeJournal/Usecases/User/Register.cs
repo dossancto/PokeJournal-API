@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 using PokeJournal.Models;
 using PokeJournal.Data;
 using PokeJournal.DTO;

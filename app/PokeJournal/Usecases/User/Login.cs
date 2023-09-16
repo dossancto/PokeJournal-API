@@ -1,10 +1,7 @@
-using System.Text;
-
 using Microsoft.EntityFrameworkCore;
 
 using PokeJournal.Models;
 using PokeJournal.Data;
-using PokeJournal.DTO;
 using PokeJournal.Providers.Criptografy;
 
 namespace PokeJournal.Usecases.User;

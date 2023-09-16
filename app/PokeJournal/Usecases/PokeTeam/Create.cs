@@ -1,9 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-
 using PokeJournal.Data;
 using PokeJournal.Models;
 using PokeJournal.DTO;
-using User = PokeJournal.Usecases.User;
 
 namespace PokeJournal.Usecases.PokeTeam;
 

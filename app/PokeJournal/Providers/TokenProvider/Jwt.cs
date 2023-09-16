@@ -1,7 +1,6 @@
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using DotNetEnv;
 using Microsoft.IdentityModel.Tokens;
 using PokeJournal.DTO;
 

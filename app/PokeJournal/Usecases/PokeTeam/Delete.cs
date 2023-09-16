@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using PokeJournal.Data;
-using PokeJournal.Models;
 
 namespace PokeJournal.Usecases.PokeTeam;
 
