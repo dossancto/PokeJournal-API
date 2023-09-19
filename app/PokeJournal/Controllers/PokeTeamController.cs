@@ -26,7 +26,7 @@ public class PokeTeamController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("List/{userId:Guid}")]
-    public async Task<ActionResult<List<PokeTeamModel>>> ListTeams(Guid userId)
+    public async Task<IActionResult> ListTeams(Guid userId)
     {
         var teams = (await new PokeTeam.Select(_context).AllFromUser(userId))
           .Select(team =>
@@ -40,7 +40,8 @@ public class PokeTeamController : ControllerBase
               return team;
           }).ToList();
 
-        return teams;
+        var result = new {data = teams};
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
