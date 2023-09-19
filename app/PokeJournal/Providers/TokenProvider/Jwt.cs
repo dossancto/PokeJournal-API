@@ -22,7 +22,7 @@ public class Jwt : ITokenProvider
             new Claim(ClaimTypes.Name, user.userName),
             new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
         }),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddHours(24),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
